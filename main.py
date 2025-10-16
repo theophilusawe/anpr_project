@@ -4,7 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 from utils import check_ocr_output
 
-# ========== FIREBASE SETUP ==========
+# FIREBASE SETUP 
 cred = credentials.Certificate('smart-gate-pi/firebase-service-account.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-gate-app-landmark-uni-default-rtdb.europe-west1.firebasedatabase.app/'
@@ -22,7 +22,7 @@ def set_firebase_data(ref, data, retries=3):
                 raise e
             time.sleep(1)
 
-# ========== SERIAL SETUP ==========
+# SERIAL SETUP
 serial_lock = threading.Lock()
 try:
     ser = serial.Serial('COM7', 9600, timeout=1)
@@ -32,7 +32,7 @@ except Exception as e:
     print(f"Failed to open serial connection: {e}")
     sys.exit(1)
 
-# ========== START FIREBASE LISTENER THREAD ==========
+# START FIREBASE LISTENER THREAD 
 def firebase_command_listener():
     command_ref = db_ref.child('gates/main-gate/command')
 
@@ -90,10 +90,10 @@ def firebase_command_listener():
 listener_thread = threading.Thread(target=firebase_command_listener, daemon=True)
 listener_thread.start()
 
-# ========== YOLO MODEL ==========
+# YOLO MODEL
 object_detection_model = YOLO('models\\license_plate_detector.pt')
 
-# ========== MAIN LOOP ==========
+# MAIN LOOP
 print("Listening for vehicle detection from Arduino...")
 
 try:
